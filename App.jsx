@@ -10,10 +10,12 @@ import reactBook2 from "./71qcie8Z-SL._AC_UL320_.jpg"
 import InputHtml from "./InputHtml"
 import GitHub from './index';
 import Fet from './fet';
-
+import Graph from "./graph";
 
 
 function App() {
+  const name = "moonhighway"
+  const file = ["learning-react", "test"]
   return (
     <>
       {/* <img src={reactBook} className="img"/>
@@ -39,8 +41,11 @@ function App() {
       {/* <div>
         <Faker/>
       </div> */}
+      {/* <div>
+        <Fet repositories={file} login={name}/>
+      </div> */}
       <div>
-        <Fet/>
+        <Graph/>
       </div>
       {/* <div>
         <GitHub />

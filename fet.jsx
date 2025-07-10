@@ -6,6 +6,7 @@ import React, {
 } from "react";
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm'
 
 export const useIterator = (
   items = [],
@@ -13,8 +14,10 @@ export const useIterator = (
 ) => {
   const [i, setIndex] = useState(initialValue);
 
+  // console.log(items[0]);
+
   const prev = useCallback(() => {
-    if(i === 0) return setIndex(items.length -1);
+    if(i === 0) return setIndex(items.length - 1);
     setIndex(i - 1);
   },[i]);
 
@@ -23,7 +26,7 @@ export const useIterator = (
     setIndex(i + 1);
   },[i]);
 
-  const item = useMemo(() => items[i], [i]);
+  const item = useMemo(() => items[i],[i]);
 
   return [item || items[0], prev, next];
 }
@@ -33,12 +36,17 @@ function RepositoryReadme({ repo, login }){
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [markdown, setMarkdown] = useState("");
+  console.log(repo);
+  console.log(login);
 
   const loadReadme = useCallback(async (login, repo) =>{
     setLoading(true);
     const uri = `https://api.github.com/repos/${login}/${repo}/readme`;
+    console.log("uri: " + uri)
     const { download_url } = await fetch(uri).then(res => res.json());
+    console.log("download_url: " + {download_url});
     const markdown = await fetch(download_url).then(res => res.text());
+    console.log(markdown);
     setMarkdown(markdown);
     setLoading(false);
   },[]);
@@ -51,11 +59,20 @@ function RepositoryReadme({ repo, login }){
   if(error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
   if(loading) return <p>Loading...</p>;
 
-  return <ReactMarkdown source={markdown} />;
+  return (
+    <>
+      <ReactMarkdown>{markdown}</ReactMarkdown>
+    </>
+  );
 }
 
 export default function RepoMenu({ repositories, login}) {
-  const [{ name }, previous, next] = useIterator( repositories );
+
+  // console.log(repositories);
+  // console.log(login);
+  const [name, previous, next] = useIterator( repositories );
+
+  // console.log(name);
 
   return(
     <>
